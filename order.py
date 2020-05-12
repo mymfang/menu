@@ -18,12 +18,16 @@ def reset_all():
 # 菜单中的食物
 def one_food_modified(i):
     minus_key = '-i'
-    show_key = '-DISPLAY-'
+    str_i = str(i)
+    key_for_num_text = 'display' + str_i
+    key_for_minus = '-' + str_i
+    key_for_plus = '+' + str_i
+
     food_image = sg.Image(f'./img/food{i+1}.png', size=(200,200))
     food_text = sg.Text(dish_name[i], font='Any 20')
-    food_minus_button = sg.Button('-', font='Any 20', size=(2,1))
-    food_num_text = sg.In(font='Any 20', size=(3,3), key=show_key)
-    food_plus_button = sg.Button('+', font='Any 20', size=(2,1))
+    food_minus_button = sg.Button(button_text='-', font='Any 20', size=(2,1), key=key_for_minus)
+    food_num_text = sg.In(font='Any 20', disabled=True, size=(3,3), key=key_for_num_text)
+    food_plus_button = sg.Button(button_text='+', font='Any 20', size=(2,1), key=key_for_plus)
 
     return food_image, food_text, food_minus_button, food_num_text, food_plus_button
 
@@ -61,26 +65,45 @@ layout = [[sg.TabGroup([[sg.Tab('菜单', menu_layout), sg.Tab('确认界面', c
 
 window = sg.Window('菜单', layout)
 
-display = 0
+# 字典:食物和对应数量
+display = {}
+for i in range(len(dish_name)):
+    display[i] = 0
+
 # make window unclosed
 while True:
     event, values = window.read()
+
+
+
     if event == sg.WIN_CLOSED:
         break
     elif event == '确认选择':
         confirm_order()
     elif event == '清除所有':
         reset_all()
-    elif event == '+':
-        display += 1
+
+    elif '+' in event:
+        strip_plus = int(event.strip('+'))
+        if display[strip_plus] <= 1000:
+            display[strip_plus] += 1
+        window['display' + str(strip_plus)].update(display[strip_plus])
     
-    elif event == '-':
+    elif '-' in event:
+        strip_minus = int(event.strip('-'))
+        if display[strip_minus] > 0:
+            display[strip_minus] -= 1
+        else:
+            display[strip_minus] = 0
+        window['display' + str(strip_minus)].update(display[strip_minus])
+    '''
+    elif event == '-1':
         if display > 0:
             display -= 1
         else:
             display = 0
-        window['-DISPLAY-'].update(display)
-
+        window['display1'].update(display)
+'''
 
     
 window.close()
