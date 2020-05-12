@@ -1,2 +1,4 @@
-print((f'img{i}') for i in range(1,5))
-print(*range(1,5))
+a = 'food_minus_button'
+b = 1
+c = a + str(b)
+print(c)
