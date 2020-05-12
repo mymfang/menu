@@ -3,17 +3,11 @@ import PySimpleGUI as sg
 DISH_NUM = 12
 dish_name = ['披萨', '香蕉', '汉堡','吐司','披萨', '香蕉', '汉堡','吐司','披萨', '香蕉', '汉堡','吐司']
 
-def one_food_layout(i):
-    return sg.Image(f'./img/food{i+1}.png', size=(200,200)), sg.Text(dish_name[i], font='Any 20'),
-
-            
 
 layout= []
 layout += [sg.Text('面馆', font='Any 30')],
-for i in range(3):
-    layout += one_food_layout(i)
-
-    
+for i in range(1, 3):
+    layout += [sg.Image(f'./img/food{i+1}.png', size=(200,200)), sg.Text(dish_name[i], font='Any 20')],
 
 window = sg.Window('菜单', layout)
 event, values = window.read()
